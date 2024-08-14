@@ -1,0 +1,1 @@
+I would try to enter multiple of " ", "\t" and "\n" to see if it increments nw once as it should, or for every instance.
