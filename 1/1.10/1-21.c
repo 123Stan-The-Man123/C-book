@@ -7,7 +7,7 @@ int my_getline(char line[], int maxline);
 void entab(int maxline, int len, int tabstop, char altered[]);
 
 int main(void) {
-    int c, len;
+    int len;
     char line[MAXLINE];
     char altered[MAXLINE];
 
