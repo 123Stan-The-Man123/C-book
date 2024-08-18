@@ -34,50 +34,40 @@ int my_getline(char s[], int lim) {
 }
 
 void fold(char s[], int len, int fold) {
-    int start_line = 0; 
-    int no_blanks = 1;
-    int j;
-    int check = 0;
-    int safe = 0;
+    int start_line = 0;
+    int safe = -1; // Last safe break point (space/tab)
+    int no_blanks = 1; // Flag to indicate if no spaces/tabs are found
 
     for (int i = 0; i < len; ++i) {
-        if (safe == 0) {
-            for (j = i; j < len && safe == 0 && !check; ++j) {
-                if (s[j] == ' ' || s[j] == '\t') {
-                    safe = j;
-                    no_blanks = 0;
-                }
-                
-                if ((j - start_line) > fold) {
-                    check = 1;
+        if (s[i] == ' ' || s[i] == '\t') {
+            safe = i; // Update safe break point
+            no_blanks = 0; // Found at least one space/tab
+        }
 
-                    if (safe == 0 && no_blanks) {
-                        safe = j;
-                    }
-                }
-            }
-
-            if (check) {
-                while (i < safe) {
-                    printf("%c", s[i]);
-                    ++i;
+        // If the current line length exceeds the fold length
+        if ((i - start_line) >= fold) {
+            if (safe >= start_line) {
+                // Break at the last safe point if available
+                for (int k = start_line; k < safe; ++k) {
+                    printf("%c", s[k]);
                 }
                 printf("\n");
-                start_line = i;
-                check = 0;
+                start_line = safe + 1; // Move start_line to the next character after safe
+            } else {
+                // If no space/tab was found, force break at fold limit
+                for (int k = start_line; k <= i; ++k) {
+                    printf("%c", s[k]);
+                }
+                printf("\n");
+                start_line = i + 1; // Move start_line to the next character after fold
             }
-
-            printf("%c", s[i]);
+            safe = -1; // Reset safe point
+            no_blanks = 1; // Reset no_blanks flag
         }
+    }
 
-        else {
-            while (i < safe) {
-                printf("%c", s[i]);
-                ++i;
-            }
-
-            printf("%c", s[i]);
-            safe = 0;
-        }
+    // Print remaining characters after the last fold
+    for (int k = start_line; k < len; ++k) {
+        printf("%c", s[k]);
     }
 }
