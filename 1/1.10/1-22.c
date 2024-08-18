@@ -34,17 +34,50 @@ int my_getline(char s[], int lim) {
 }
 
 void fold(char s[], int len, int fold) {
-    int copy = fold;
+    int start_line = 0; 
+    int no_blanks = 1;
+    int j;
+    int check = 0;
+    int safe = 0;
 
     for (int i = 0; i < len; ++i) {
-        if (i == fold) {
-            printf("\n");
+        if (safe == 0) {
+            for (j = i; j < len && safe == 0 && !check; ++j) {
+                if (s[j] == ' ' || s[j] == '\t') {
+                    safe = j;
+                    no_blanks = 0;
+                }
+                
+                if ((j - start_line) > fold) {
+                    check = 1;
+
+                    if (safe == 0 && no_blanks) {
+                        safe = j;
+                    }
+                }
+            }
+
+            if (check) {
+                while (i < safe) {
+                    printf("%c", s[i]);
+                    ++i;
+                }
+                printf("\n");
+                start_line = i;
+                check = 0;
+            }
+
             printf("%c", s[i]);
-            fold += copy;
         }
-        
+
         else {
+            while (i < safe) {
+                printf("%c", s[i]);
+                ++i;
+            }
+
             printf("%c", s[i]);
+            safe = 0;
         }
     }
 }
