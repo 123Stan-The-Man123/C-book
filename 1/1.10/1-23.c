@@ -32,17 +32,15 @@ int my_getline(char s[], int lim) {
 }
 
 void remove_comments(char s[], int len) {
-    int i;
+    int i, j;
     
     for (i = 0; i < len; ++i) {
         if (s[i] == '/' && s[i+1] == '*') {
-            i += 2;
-        
-            while (!(s[i] == '*' && s[i+1] == '/')) {
-                ++i;
+            for (j = i; j < len-1 && !(s[j] == '*' && s[j+1] == '/'); ++j) {
+                ;
             }
 
-            ++i;
+            i = j + 1;
         }
 
         else {
