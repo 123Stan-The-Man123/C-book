@@ -34,17 +34,13 @@ int my_getline(char s[], int lim) {
 
 void htoi(char s[], int len) {
     int i = 0;
-    long multiplier = pow(16, len);
+    long multiplier = pow(16, len-1);
     int hex = 0;
     char current;
 
     if (s[i] == '0' && s[i+1] == 'x' || s[i+1] == 'X') {
         i = 2;
         multiplier = multiplier / (16*16);
-    }
-
-    if (s[len] == '\0') {
-        multiplier /= 16;
     }
 
     if (s[len-1] == '\n') {
