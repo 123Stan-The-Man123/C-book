@@ -2,7 +2,7 @@
 #define MAXLINE 1000
 
 int my_getline(char line[], int maxline);
-int get_location(char line1[], int len1, char line2[], int len2);
+int any(char line1[], int len1, char line2[], int len2);
 
 int main(void) {
     char line1[MAXLINE], line2[MAXLINE];
@@ -11,7 +11,7 @@ int main(void) {
     len1 = my_getline(line1, MAXLINE);
     len2 = my_getline(line2, MAXLINE);
 
-    location = get_location(line1, len1, line2, len2);
+    location = any(line1, len1, line2, len2);
 
     printf("%d\n", location);
 
@@ -33,7 +33,7 @@ int my_getline(char s[], int lim) {
     return i;
 }
 
-int get_location(char s1[], int lim1, char s2[], int lim2) {
+int any(char s1[], int lim1, char s2[], int lim2) {
     int i, j, location, found;
     location = -1;
     found = 0;
