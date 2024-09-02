@@ -3,13 +3,13 @@
 
 #define MAXLINE 1000
 
-void itoa(int n, char s[], int base);
+void itob(int n, char s[], int base);
 void reverse(char s[]);
 
 int main(void) {
     char line[MAXLINE];
     
-    itoa(4308760, line, 2);
+    itob(128, line, 2);
 
     printf("%s\n", line);
 
@@ -35,21 +35,17 @@ void reverse(char s[]) {
     return ;
 }
 
-void itoa(int n, char s[], int b){
+void itob(int n, char s[], int b){
     int remainder, i;
 
-    if (b <= 0 || b > 36) {
+    if (b <= 1 || b > 36) {
         strcpy(s, "Invalid base.");
         return ;
     }
 
     for (i = 0; n != 0; ++i) {
-        if ((remainder = n % b) < 10)
-            s[i] = remainder + '0';
-        
-        else 
-            s[i] = (remainder - 10) + 'A'; 
-        
+        s[i] = ((remainder = n % b) < 10) ? remainder + '0' : (remainder - 10) + 'A';
+
         n /= b;
     }
 
