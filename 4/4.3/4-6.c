@@ -17,6 +17,7 @@ double val[MAXVAL];  /* value stack */
 char buf[BUFSIZE];    /* buffer for ungetch */
 int bufp = 0;         /* next free position in buf */
 int command = 0;
+double last_printed;
 double variables[26] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 int getop(char []);
@@ -79,12 +80,18 @@ while ((type = getop(s)) != EOF) {
                 printf("error: zero divisor\n");
             
             break;
+        
+        case '?':
+            variable(s[0]);
+            break;
 
         case '\n':
             if(command)
                 command = 0;
-            else
-                printf("\t%.8g\n", pop());
+            else {
+                last_printed = pop();
+                printf("\t%.8g\n", last_printed);
+            }
             
             break;
             
@@ -273,6 +280,11 @@ void commands(char s[]) {
 }
 
 void variable(char c) {
+    if (c == '?') {
+        push(last_printed);
+        return ;
+    }
+    
     int type;
     int index = (isupper(c)) ? c - 'A' : c - 'a';
     char s[MAXOP];
