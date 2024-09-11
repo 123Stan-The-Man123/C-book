@@ -14,7 +14,7 @@
 
 int sp = 0;          /* next free stack position */
 double val[MAXVAL];  /* value stack */
-char buf[BUFSIZE];    /* buffer for ungetch */
+int buf[BUFSIZE];    /* buffer for ungetch */
 int bufp = 0;         /* next free position in buf */
 int command = 0;
 double last_printed;
