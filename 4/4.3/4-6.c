@@ -291,6 +291,9 @@ void variable(char c) {
     
     if ((type = getop(s)) == '=')
         variables[index] = pop();
+    
+    else if (type == NUMBER)
+        push(atof(s));
 
     else if (type == COMMAND) {
         push(variables[index]);
