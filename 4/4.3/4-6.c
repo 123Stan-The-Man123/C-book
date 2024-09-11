@@ -291,6 +291,12 @@ void variable(char c) {
     
     if ((type = getop(s)) == '=')
         variables[index] = pop();
+
+    else if (type == COMMAND) {
+        push(variables[index]);
+        commands(s);
+        return ;
+    }
     
     else
         ungetch(s[0]);
