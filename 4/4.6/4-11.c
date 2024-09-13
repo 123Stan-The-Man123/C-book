@@ -93,11 +93,10 @@ double pop(void) {
 
 #define BUFSIZE 100
    
-char buf[BUFSIZE];    /* buffer for ungetch */
+char buf[BUFSIZE]; 
 static int bufp;
 
 int getch(void);
-void ungetch(int);
    
 /* getop:  get next character or numeric operand */
 int getop(char s[]) {
