@@ -4,6 +4,10 @@
 #include <string.h>
 
 #define MAXLINE 1000
+#define BUFSIZE 100
+
+char buf[BUFSIZE];
+int bufp = 0;
 
 char *my_getline(char *s, size_t maxline);
 int my_atoi(char *s);
@@ -11,6 +15,10 @@ void reverse(char *s);
 char *my_itoa(char *s, int n);
 int my_htoi(char *s, size_t len);
 char *my_itob(char *s, size_t n, size_t b);
+int str_index(char *s, char *t);
+int getch(void);
+void ungetch(int c);
+
 
 int main(void) {
     char s[MAXLINE];
@@ -19,12 +27,15 @@ int main(void) {
     char hexadecimal[MAXLINE] = "0xFFFFFF";
     char returned_hex[MAXLINE];
     size_t base = 2;
+    char string[MAXLINE] = "This is a string!";
+    char substring[MAXLINE] = "ring!";
 
     printf("You entered: %s", my_getline(s, MAXLINE));
     printf("The string \"%s\" is now integer: %d\n", digit, my_atoi(digit));
     printf("The int %d is now the string: \"%s\"\n", num, my_itoa(s, num));
     printf("The hexadecimal \"%s\" is the integer: %d\n", hexadecimal, my_htoi(hexadecimal, 8));
-    printf("The integer %d in the base %d is: %s\n", 255, base, my_itob(returned_hex, 255, base));
+    printf("The integer %d in the base %zd is: %s\n", 255, base, my_itob(returned_hex, 255, base));
+    printf("The sub-string \"%s\" is in the string \"%s\" at location: %d\n", substring, string, str_index(string, substring));
 
     return 0;
 }
@@ -156,4 +167,37 @@ char *my_itob(char *s, size_t n, size_t b) {
     reverse(s_start);
 
     return s_start;
+}
+
+int str_index(char *s, char *t) {
+    char *s_start = s;
+    char *t_start = t;
+    char *j;
+
+    for (; *s != '\0'; s++) {
+        for (j = s, t = t_start; *t != '\0' && *j == *t; j++, t++)
+            ;
+        
+        if (t > t_start && *t == '\0') {
+            return s - s_start;
+        }
+    }
+
+    return -1;
+}
+
+int getch(void) {
+    return (bufp > 0) ? buf[--bufp] : getchar();
+}
+
+void ungetch(int c) {
+    if (bufp >= BUFSIZE)
+        printf("ungetch: too manu characters\n");
+
+    else
+        buf[bufp++] = c;
+}
+
+int getop(char *s) {
+    return 0;
 }
