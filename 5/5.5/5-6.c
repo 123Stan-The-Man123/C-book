@@ -7,7 +7,7 @@
 #define BUFSIZE 100
 
 char buf[BUFSIZE];
-int bufp = 0;
+static int bufp = 0;
 
 char *my_getline(char *s, size_t maxline);
 int my_atoi(char *s);
@@ -18,7 +18,7 @@ char *my_itob(char *s, size_t n, size_t b);
 int str_index(char *s, char *t);
 int getch(void);
 void ungetch(int c);
-
+int getop(char *s);
 
 int main(void) {
     char s[MAXLINE];
@@ -29,6 +29,7 @@ int main(void) {
     size_t base = 2;
     char string[MAXLINE] = "This is a string!";
     char substring[MAXLINE] = "ring!";
+    char output[MAXLINE];
 
     printf("You entered: %s", my_getline(s, MAXLINE));
     printf("The string \"%s\" is now integer: %d\n", digit, my_atoi(digit));
@@ -36,6 +37,8 @@ int main(void) {
     printf("The hexadecimal \"%s\" is the integer: %d\n", hexadecimal, my_htoi(hexadecimal, 8));
     printf("The integer %d in the base %zd is: %s\n", 255, base, my_itob(returned_hex, 255, base));
     printf("The sub-string \"%s\" is in the string \"%s\" at location: %d\n", substring, string, str_index(string, substring));
+    getop(output);
+    printf("Getop: %s\n", output);
 
     return 0;
 }
@@ -199,5 +202,28 @@ void ungetch(int c) {
 }
 
 int getop(char *s) {
+    int c;
+
+    while (isspace(*s = c = getch()))
+        ;
+    
+    *(s+1) = '\0';
+
+    if (!isdigit(c) && c != '.')
+        return c;
+    
+    if (isdigit(c))
+        while (isdigit(*++s = c = getch()))
+            ;
+    
+    if (c == '.')
+        while(isdigit(*++s = c = getch()))
+            ;
+    
+    *s = '\0';
+
+    if (c != EOF)
+        ungetch(c);
+    
     return 0;
 }
