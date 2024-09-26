@@ -45,7 +45,6 @@ int my_getline(char s[],int lim) {
 }
 
 int my_getline(char *, int);
-char *alloc(int);
 
 /* readlines:  read input lines */
 int readlines(char *lineptr[], int maxlines, char buffer[]) {
