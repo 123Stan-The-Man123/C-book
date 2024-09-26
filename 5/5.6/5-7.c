@@ -1,19 +1,21 @@
 #include <stdio.h>
 #include <string.h>
 
+#define BUFSIZE 10000
 #define MAXLINES 5000     /* max #lines to be sorted */
 
 char *lineptr[MAXLINES];  /* pointers to text lines */
 
-int readlines(char *lineptr[], int nlines);
+int readlines(char *lineptr[], int nlines, char buffer[]);
 void writelines(char *lineptr[], int nlines);
 void qsort(char *lineptr[], int left, int right);
 
 /* sort input lines */
 int main(void) {
     int nlines;     /* number of input lines read */
+    static char buffer[BUFSIZE];
 
-    if ((nlines = readlines(lineptr, MAXLINES)) >= 0) {
+    if ((nlines = readlines(lineptr, MAXLINES, buffer)) >= 0) {
         qsort(lineptr, 0, nlines-1);
         writelines(lineptr, nlines);
 
@@ -45,34 +47,25 @@ int my_getline(char s[],int lim) {
 int my_getline(char *, int);
 char *alloc(int);
 
-#define ALLOCSIZE 10000 /* size of available space */
-   
-static char allocbuf[ALLOCSIZE]; /* storage for alloc */
-static char *allocp = allocbuf;  /* next free position */
-   
-char *alloc(int n) {   /* return pointer to n characters */
-    if (allocbuf + ALLOCSIZE - allocp >= n) {  /* it fits */
-        allocp += n;
-        
-        return allocp - n; /* old p */
-    
-    } else      /* not enough room */
-        return 0;
-}
-
-void afree(char *p) { /* free storage pointed to by p */
-    if (p >= allocbuf && p < allocbuf + ALLOCSIZE)
-        allocp = p;
-}
-
 /* readlines:  read input lines */
-int readlines(char *lineptr[], int maxlines) {
+int readlines(char *lineptr[], int maxlines, char buffer[]) {
     int len, nlines;
     char *p, line[MAXLEN];
+    char *bufp = buffer;
     nlines = 0;
 
-    while ((len = my_getline(line, MAXLEN)) > 0)
-        if (nlines >= maxlines || (p = alloc(len)) == NULL)
+    while ((len = my_getline(line, MAXLEN)) > 0) {
+        if (buffer + BUFSIZE - bufp >= len) {
+            bufp += len;
+
+            p = bufp - len;
+        }
+        
+        else {
+            p = 0;
+        }
+
+        if (nlines >= maxlines || p == NULL)
             return -1;
         
         else {
@@ -80,6 +73,7 @@ int readlines(char *lineptr[], int maxlines) {
             strcpy(p, line);
             lineptr[nlines++] = p;
         }
+    }
     
     return nlines;
 }
